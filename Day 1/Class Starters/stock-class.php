@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
  * Week 7 Day 1 - Build a Stock class
  * Run from the terminal: php stock-class.php
@@ -32,7 +33,53 @@
  *   No $ after the arrow:  $item->name   (not $item->$name)
  * - Our Stock needs: id (int), symbol (string), company (string), price (float).
  */
+class Stock{
+    public int $id;
+    public string $symbol;
+    public string $company;
+    public float $price;
 
+
+    public function __construct(string $symbol, string $company, float $price){
+        echo("In am a new object");
+
+        $this->symbol = $symbol;
+        $this->company = $company;
+        $this->price = $price;
+    }
+
+
+    public function totalFor(int $shares): float{
+        return $this->price * $shares;
+    }
+
+    public function stockInfo(): string{
+        return"{$this->company} is priced at $" . number_format($this->price, 2);
+    }
+}
+
+$apple = new Stock("AAPL", "Apple Inc.", 500.00);
+// $apple->id = 1;
+// $apple->symbol = "AAPL";
+// $apple->company = "Apple Inc.";
+// $apple->price = 500.00;
+
+echo  '10 shares: $' . number_format($apple->totalFor(10), 2);
+echo ($apple->stockInfo());
+
+
+$amazon = new Stock('AMZN', 'Amazon.com Inc.', 250.00);
+// $amazon->id = 2;
+// $amazon->symbol = 'AMZN';
+// $amazon->company = 'Amazon.com Inc.';
+// $amazon->price = 250.00;
+ 
+$stocks = [];
+array_push($stocks, $apple, $amazon);
+ 
+foreach ($stocks as $stock) {
+    echo $stock->stockInfo() . "\n";
+}
 
 /* ---------------------------------------------------------------------
  * STEP 4 NOTES: methods
@@ -90,3 +137,14 @@
  * - Only ONE line should know the column numbers: the line that builds the
  *   object. Everything after it uses property names.
  */
+$portfolio = [];
+$file = fopen(__dir__ . "/stock.csv", "r");
+
+while(($row = fgetcsv($file)) !== false){
+    $portfolio[] = new Stock($row[0], $row[1], (float)$row[2]);
+}
+fclose($file);
+
+foreach($portfolio as $stock){    
+    echo "{$stock->symbol}: " . $stock->stockInfo() . ' | 10 shares: $' . number_format($stock->totalFor(10), 2) . "\n";
+}
