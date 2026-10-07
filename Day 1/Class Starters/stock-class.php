@@ -34,6 +34,8 @@ declare(strict_types=1);
  * - Our Stock needs: id (int), symbol (string), company (string), price (float).
  */
 class Stock{
+    public static int $nextId = 1;
+    
     public int $id;
     public string $symbol;
     public string $company;
@@ -41,7 +43,9 @@ class Stock{
 
 
     public function __construct(string $symbol, string $company, float $price){
-        echo("In am a new object");
+        // echo("In am a new object");
+        $this->id = self::$nextId;
+        self::$nextId++;
 
         $this->symbol = $symbol;
         $this->company = $company;
@@ -54,7 +58,7 @@ class Stock{
     }
 
     public function stockInfo(): string{
-        return"{$this->company} is priced at $" . number_format($this->price, 2);
+        return"{$this->company} is priced at $" . number_format($this->price, 2) . "\n\n";
     }
 }
 
@@ -78,8 +82,10 @@ $stocks = [];
 array_push($stocks, $apple, $amazon);
  
 foreach ($stocks as $stock) {
-    echo $stock->stockInfo() . "\n";
+    echo"#{$stock->id} {$stock->symbol}: " . $stock->stockInfo() . "\n"; 
 }
+
+echo "Next id will be " . Stock::$nextId . "\n\n";
 
 /* ---------------------------------------------------------------------
  * STEP 4 NOTES: methods
