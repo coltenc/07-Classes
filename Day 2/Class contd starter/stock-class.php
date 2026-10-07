@@ -10,11 +10,12 @@ declare(strict_types=1);
 class Stock
 {
     public static int $nextId = 1;
+    public static int $id;
 
-    public int $id;
     public string $symbol;
     public string $company;
     public float $price;
+
 
     public function __construct(string $symbol, string $company, float $price)
     {
@@ -25,6 +26,7 @@ class Stock
         $this->company = $company;
         $this->price = $price;
     }
+
 
     public function totalFor(int $shares): float
     {
@@ -37,11 +39,13 @@ class Stock
     }
 }
 
+
 $apple = new Stock('AAPL', 'Apple Inc.', 500.00);
 $amazon = new Stock('AMZN', 'Amazon.com Inc.', 250.00);
 
 $stocks = [];
 array_push($stocks, $apple, $amazon);
+
 
 foreach ($stocks as $stock) {
     echo "#{$stock->id} {$stock->symbol}: " . $stock->stockInfo() . "\n";
@@ -57,6 +61,7 @@ while (($row = fgetcsv($file)) !== false) {
 }
 
 fclose($file);
+
 
 foreach ($portfolio as $stock) {
     echo "#{$stock->id} {$stock->symbol}: " . $stock->stockInfo()
